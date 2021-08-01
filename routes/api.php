@@ -25,19 +25,19 @@ Route::get('/ping', function (Request $request) {
 
 
 Route::post('/autentificar', function (Request $request) {
-    $permiso = new Permiso();        
+    $permiso = new Permiso();
     $login = $request->login;
     $password =  md5($request->pass) ;
     $tipo =  'adm';
-    
+
     $usuario = $permiso->obtenerUsuario($login,$password,$tipo);
-    
+
     if($usuario){
         $permisos = $permiso->obtenerPermisosUsuario($usuario->perfil_id,$usuario->tipo);
-        $respuesta =['success'=>true,'id'=>$usuario->id,'login'=>$usuario->login,'nombre'=>$usuario->nombre_completo,'perfil_id'=>$usuario->perfil_id,'permisos'=>$permisos];
+        $respuesta =[['success'=>true,'id'=>$usuario->id,'login'=>$usuario->login,'nombre'=>$usuario->nombre_completo,'perfil_id'=>$usuario->perfil_id]];
         return response($respuesta, 200)->header('Content-Type', 'application/json');
     }else{
-        $respuesta=['success'=>false,"mensaje"=>"usuario no encontrado"];
+        $respuesta=[['success'=>false,"mensaje"=>"usuario no encontrado"]];
         return response($respuesta, 200)->header('Content-Type', 'application/json');
     }
 });
